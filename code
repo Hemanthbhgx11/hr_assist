@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual HR Interview Question Generator</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Cyberpunk reddish-blue gradient background */
+            background: linear-gradient(to right, #4B0082, #00008B); /* Dark Violet to Dark Blue */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align to top for better content flow */
+            min-height: 100vh;
+            padding: 2rem;
+            box-sizing: border-box;
+            color: #C5C6C7; /* Light gray for general text */
+        }
+        .container {
+            background-color: #232946; /* Dark blue-gray */
+            border-radius: 1.5rem; /* More rounded corners */
+            /* Neon-like box shadow */
+            box-shadow: 0 0 30px rgba(138, 43, 226, 0.5), 0 0 60px rgba(0, 191, 255, 0.3);
+            padding: 2.5rem; /* Increased padding */
+            max-width: 900px; /* Increased max-width */
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            border: 1px solid #45A29E; /* Subtle neon border */
+        }
+        h1, h2 {
+            color: #66FCF1; /* Vibrant light blue/cyan for headings */
+        }
+        label {
+            color: #C5C6C7; /* Lighter shade for labels */
+        }
+        textarea {
+            min-height: 150px; /* Increased min-height for text areas */
+            resize: vertical;
+            background-color: #0F0F1A; /* Very dark background for text areas */
+            color: #C5C6C7; /* Light text color */
+            border: 1px solid #45A29E; /* Neon border */
+            border-radius: 0.75rem; /* Rounded corners for text areas */
+            padding: 1rem;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2); /* Inner shadow */
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #66FCF1; /* Brighter neon on focus */
+            box-shadow: 0 0 0 3px rgba(102, 252, 241, 0.5); /* Neon focus ring */
+        }
+        textarea::placeholder {
+            color: #6B7280; /* Darker placeholder text */
+        }
+        button {
+            transition: all 0.2s ease-in-out;
+            background: linear-gradient(to right, #66FCF1, #45A29E); /* Cyan to Teal gradient */
+            color: #1F2833; /* Dark text for contrast */
+            font-bold py-3 px-6 rounded-xl;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(102, 252, 241, 0.3); /* Neon button shadow */
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 252, 241, 0.5); /* Enhanced neon shadow on hover */
+            background: linear-gradient(to right, #45A29E, #66FCF1); /* Reverse gradient on hover */
+        }
+        button:disabled {
+            background: #3A4750;
+            color: #6B7280;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #1F2833; /* Darker spinner top */
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .message-box {
+            background-color: #3a3a5a; /* Darker purple-blue */
+            border: 1px solid #66FCF1; /* Neon border */
+            color: #9FE2BF; /* Light green for info */
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            box-shadow: 0 0 10px rgba(102, 252, 241, 0.2);
+        }
+        .error-message {
+            background-color: #5a3a3a; /* Dark red */
+            border: 1px solid #FF0000; /* Bright red border */
+            color: #FF6347; /* Tomato red for error text */
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+        }
+        #questionsOutput {
+            background-color: #0F0F1A; /* Very dark background */
+            border: 1px solid #45A29E; /* Neon border */
+            box-shadow: inset 0 0 15px rgba(102, 252, 241, 0.1); /* Inner neon glow */
+            color: #C5C6C7; /* Light text color */
+        }
+        #questionsContent p {
+            color: #C5C6C7; /* Ensure text inside output is light */
+        }
+        .linkedin-link {
+            color: #66FCF1; /* Neon blue for the link */
+            text-decoration: none; /* Remove underline */
+            transition: color 0.2s ease-in-out;
+        }
+        .linkedin-link:hover {
+            color: #9FE2BF; /* Lighter neon on hover */
+            text-decoration: underline; /* Add underline on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-4xl font-extrabold text-center mb-2">Virtual HR Interview Assistant</h1>
+        <p class="text-center text-sm text-gray-400 mb-6">
+            Built by <a href="https://www.linkedin.com/in/hemanth-goud-burra-3a33a831b?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BEfAyLJ%2FaQhSFNjhnjMAjdg%3D%3D" target="_blank" class="linkedin-link">Hemanth Goud Burra</a>
+        </p>
+
+        <!-- Disclaimer about email/LinkedIn automation and resume parsing -->
+        <div class="message-box">
+            <p class="font-semibold mb-2">Important Notes:</p>
+            <ul class="list-disc list-inside ml-4">
+                <li>This tool focuses on generating interview questions using AI.</li>
+                <li>Due to security and privacy limitations of a client-side application, direct integration with email services or social media platforms (like LinkedIn for automated messaging) is not possible here. These functionalities require robust backend systems and explicit API permissions.</li>
+                <li>For resume analysis, please **copy and paste the relevant content** from your resume file (e.g., PDF, DOCX) into the "Applicant Resume" text area. Direct parsing of complex file formats is not supported in this environment.</li>
+            </ul>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label for="jobRequirements" class="block text-lg font-medium mb-2">Job Requirements:</label>
+                <textarea id="jobRequirements"
+                          class="w-full"
+                          placeholder="Paste the job description or key requirements here (e.g., 'Strong JavaScript skills, experience with React, 5+ years in front-end development, problem-solving abilities')."></textarea>
+            </div>
+            <div>
+                <label for="applicantResume" class="block text-lg font-medium mb-2">Applicant Resume (Paste Key Details):</label>
+                <textarea id="applicantResume"
+                          class="w-full"
+                          placeholder="Copy and paste relevant sections of the applicant's resume here (e.g., 'John Doe, 7 years experience as a Software Engineer, proficient in React, Node.js, AWS. Led 3 major projects.')."></textarea>
+            </div>
+        </div>
+
+        <button id="generateQuestionsBtn"
+                class="flex items-center justify-center gap-2">
+            <span id="buttonText">Generate Interview Questions</span>
+            <div id="loadingSpinner" class="loading-spinner hidden"></div>
+        </button>
+
+        <div id="errorMessage" class="error-message hidden"></div>
+
+        <div id="questionsOutput" class="mt-8 p-6 rounded-xl shadow-inner">
+            <h2 class="text-2xl font-semibold mb-4">Generated Interview Questions:</h2>
+            <div id="questionsContent" class="leading-relaxed">
+                <p>Your generated interview questions will appear here.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const generateQuestionsBtn = document.getElementById('generateQuestionsBtn');
+        const jobRequirementsInput = document.getElementById('jobRequirements');
+        const applicantResumeInput = document.getElementById('applicantResume');
+        const questionsOutput = document.getElementById('questionsOutput');
+        const questionsContent = document.getElementById('questionsContent');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const buttonText = document.getElementById('buttonText');
+        const errorMessage = document.getElementById('errorMessage');
+
+        generateQuestionsBtn.addEventListener('click', async () => {
+            const jobRequirements = jobRequirementsInput.value.trim();
+            const applicantResume = applicantResumeInput.value.trim();
+
+            // Clear previous output and error
+            questionsContent.innerHTML = '';
+            errorMessage.classList.add('hidden');
+            errorMessage.textContent = '';
+
+            if (!jobRequirements || !applicantResume) {
+                errorMessage.textContent = 'Please provide both job requirements and applicant resume details.';
+                errorMessage.classList.remove('hidden');
+                return;
+            }
+
+            // Show loading state
+            buttonText.textContent = 'Generating...';
+            loadingSpinner.classList.remove('hidden');
+            generateQuestionsBtn.disabled = true;
+            questionsContent.innerHTML = '<p class="text-gray-500">Generating questions, please wait...</p>';
+
+            const prompt = `As a virtual HR assistant, your task is to generate insightful interview questions based on the provided job requirements and applicant's resume. The questions should aim to reveal the applicant's readiness, problem-solving skills, and specific experiences relevant to the role.
+
+Job Requirements:
+${jobRequirements}
+
+Applicant's Resume (Key Details):
+${applicantResume}
+
+Generate a list of 5-7 questions. Each question should be clear and concise. Focus on behavioral, situational, and technical questions that bridge the gap between the requirements and the resume. Format the output as a numbered list.`;
+
+            try {
+                // Gemini API call
+                let chatHistory = [];
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                const payload = { contents: chatHistory };
+                // The API key is now explicitly set with the provided key.
+                const apiKey = "AIzaSyAyn6G2nP83vzlHQZ8vzjzsiVrker1sBYU"; 
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorDetail = await response.json();
+                    throw new Error(`API error: ${response.status} ${response.statusText} - ${JSON.stringify(errorDetail)}`);
+                }
+
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const generatedText = result.candidates[0].content.parts[0].text;
+                    questionsContent.innerHTML = generatedText.replace(/\n/g, '<br>'); // Display newlines as breaks
+                } else {
+                    questionsContent.innerHTML = '<p class="text-red-500">Could not generate questions. The AI response was empty or malformed.</p>';
+                }
+            } catch (error) {
+                console.error('Error generating questions:', error);
+                errorMessage.textContent = `Failed to generate questions: ${error.message}. Please try again.`;
+                errorMessage.classList.remove('hidden');
+                questionsContent.innerHTML = ''; // Clear any loading message
+            } finally {
+                // Reset button state
+                buttonText.textContent = 'Generate Interview Questions';
+                loadingSpinner.classList.add('hidden');
+                generateQuestionsBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
